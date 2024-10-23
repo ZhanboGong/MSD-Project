@@ -1,0 +1,24 @@
+/* Dashboard.css */
+.dashboard {
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.dashboard h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.dashboard-widgets {
+    display: flex;
+    gap: 20px;
+}
+
+.widget {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    text-align: center;
+}
