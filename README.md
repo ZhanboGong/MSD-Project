@@ -114,5 +114,5 @@ pytest --maxfail=5 --disable-warnings
 ## 联系信息
 
 如果有任何问题，请联系：
-- **项目负责人**：Your Name (your.email@example.com)  
-- **GitHub**：[your-username](https://github.com/your-username)
+- **项目负责人**：Zhanbo Gong (z.gong.11@student.scu.edu.au)  
+- **GitHub**：[ZhanboGong](https://github.com/ZhanboGong)
