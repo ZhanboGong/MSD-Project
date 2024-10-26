@@ -1,35 +1,36 @@
-# 创建 test_medication_reminder.py 的内容，用于测试 medication_reminder.py
+import unittest
+from io import StringIO
+from unittest.mock import patch
 import medication_reminder
-from datetime import datetime
 
-def test_check_reminders_for_today(monkeypatch, capsys):
-    # 设置日期为 2024-10-28
-    fake_today = "2024-10-28"
-    monkeypatch.setattr(medication_reminder, 'datetime', FakeDateTime(fake_today))
+class TestMedicationReminder(unittest.TestCase):
 
-    # 检查 patient_123 的提醒信息
-    medication_reminder.check_reminders("patient_123")
-    captured = capsys.readouterr()
-    assert "Reminder: Medication for Patient patient_123 is scheduled for today." in captured.out
+    def setUp(self):
+        self.today = medication_reminder.TODAY
+        self.reminders = medication_reminder.reminders
 
-def test_no_reminders_for_patient(capsys):
-    # 使用不存在的病人ID
-    medication_reminder.check_reminders("nonexistent_patient")
-    captured = capsys.readouterr()
-    assert "No reminders available for this patient." in captured.out
+    def test_no_reminders(self):
+        with patch('sys.stdout', new=StringIO()) as fake_out:
+            medication_reminder.check_reminders("nonexistent_patient", today=self.today)
+        self.assertIn("No reminders available for this patient.", fake_out.getvalue().strip())
 
-class FakeDateTime:
-    def __init__(self, fake_today):
-        self.fake_today = fake_today
+    def test_medication_reminder_today(self):
+        with patch('sys.stdout', new=StringIO()) as fake_out:
+            medication_reminder.check_reminders("patient_123", today="2024-10-28")
+        self.assertIn("Reminder: Medication for Patient patient_123 is scheduled for today.", fake_out.getvalue().strip())
+        self.assertIn("No reminders due today for Patient patient_123", fake_out.getvalue().strip())
 
-    def now(self):
-        # 返回假日期
-        return datetime.strptime(self.fake_today, "%Y-%m-%d")
+    def test_test_reminder_today(self):
+        with patch('sys.stdout', new=StringIO()) as fake_out:
+            medication_reminder.check_reminders("patient_123", today="2024-10-30")
+        self.assertIn("Reminder: Test for Patient patient_123 is scheduled for today.", fake_out.getvalue().strip())
+        self.assertIn("No reminders due today for Patient patient_123", fake_out.getvalue().strip())
 
-    def strftime(self, format):
-        return self.fake_today
+    def test_both_reminders_today(self):
+        with patch('sys.stdout', new=StringIO()) as fake_out:
+            medication_reminder.check_reminders("patient_456", today="2024-10-29")
+        self.assertIn("Reminder: Medication for Patient patient_456 is scheduled for today.", fake_out.getvalue().strip())
+        self.assertIn("Reminder: Test for Patient patient_456 is scheduled for today.", fake_out.getvalue().strip())
 
-if __name__ == "__main__":
-    import pytest
-    pytest.main(["-v", "test_medication_reminder.py"])
-
+if __name__ == '__main__':
+    unittest.main()
