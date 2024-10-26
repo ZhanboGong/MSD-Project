@@ -1,4 +1,4 @@
-# patient_account_creation.py
+# patient-account-creation.py
 patients = {}
 
 def create_account(medical_record_number, patient_id):
