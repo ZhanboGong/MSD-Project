@@ -1,6 +1,4 @@
 # 创建 test_medication_reminder.py 的内容，用于测试 medication_reminder.py
-
-test_content = """
 import medication_reminder
 from datetime import datetime
 
@@ -34,10 +32,4 @@ class FakeDateTime:
 if __name__ == "__main__":
     import pytest
     pytest.main(["-v", "test_medication_reminder.py"])
-"""
 
-# 将测试文件写入 backend/tests/test_medication_reminder.py
-with open("/mnt/data/test_medication_reminder.py", "w", encoding="utf-8") as f:
-    f.write(test_content)
-
-"/mnt/data/test_medication_reminder.py"
