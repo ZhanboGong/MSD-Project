@@ -1,0 +1,45 @@
+name: CI - Automated Testing
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'  # Adjust to match your project's Python version
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt  # Ensure your dependencies are listed here
+
+    - name: Run tests with pytest
+      run: |
+        pytest --junitxml=junit/test-results.xml --cov=your_project_directory --cov-report xml
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results
+        path: junit/test-results.xml
+
+    - name: Upload coverage report
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report
+        path: coverage.xml
+
+    - name: Post status to GitHub
+      if: failure()
+      run: echo "Tests failed! Please check the logs and fix the issues."
